@@ -92,7 +92,7 @@ impl Board {
 }
 
 fn main() {
-    println!("Welcome to Tic-tac-toe!");
+    println!("Welcome to ZiK-ZaK-Zoo!");
     let mut human = Player { symbol: Cell::Z, wins: 0, losses: 0, draws: 0 };
     let mut computer = Player { symbol: Cell::K, wins: 0, losses: 0, draws: 0 };
     let mut rng = SimpleRNG::new();
