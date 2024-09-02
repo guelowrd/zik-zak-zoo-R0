@@ -15,9 +15,9 @@ command:
 cargo run
 ```
 
-## Questions, Feedback, and Collaborations (keep[ing that part cause RISC Zero ppl are awesome])
+## Questions, Feedback, and Collaborations (keeping that part cause RISC Zero ppl are cool)
 
-We'd love to hear from you on [Discord][discord] or [Twitter][twitter].
+We'd love to hear from you on Discord or Twitter.
 
 [bonsai access](https://bonsai.xyz/apply)
 [cargo-risczero](https://docs.rs/cargo-risczero)
