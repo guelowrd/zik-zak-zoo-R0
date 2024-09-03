@@ -1,4 +1,4 @@
-# Tic-tac-toe game but it's actually called Zik-zak-zoo (& you can zk-verify you won 3 times thanks to RISC Zero)
+# Tic-tac-toe game but it's actually called Zik-zak-zoo (& you can zk-verify you won thanks to RISC Zero)
 
 Title is pretty self-explanatory
 
@@ -35,5 +35,3 @@ We'd love to hear from you on Discord or Twitter.
 [twitter](https://twitter.com/risczero)
 [zkvm-overview](https://dev.risczero.com/zkvm)
 [zkhack-iii](https://www.youtube.com/watch?v=Yg_BGqj_6lg&list=PLcPzhUaCxlCgig7ofeARMPwQ8vbuD6hC5&index=5)
-
-OK bye

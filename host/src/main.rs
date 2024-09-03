@@ -16,13 +16,15 @@ struct Board {
 
 struct Player {
     symbol: Cell,
-    wins: u32,
-    losses: u32,
-    draws: u32,
 }
 
 struct SimpleRNG {
     state: u64,
+}
+
+struct GameRound {
+    seed: u64,
+    player_moves: Vec<usize>,
 }
 
 impl SimpleRNG {
@@ -93,20 +95,18 @@ impl Board {
 
 fn main() {
     println!("Welcome to ZiK-ZaK-Zoo!");
-    let mut human = Player { symbol: Cell::Z, wins: 0, losses: 0, draws: 0 };
-    let mut computer = Player { symbol: Cell::K, wins: 0, losses: 0, draws: 0 };
+    let human = Player { symbol: Cell::Z };
+    let computer = Player { symbol: Cell::K };
     let mut rng = SimpleRNG::new();
 
-    loop {
-        play_game(&mut human, &mut computer, &mut rng);
-        display_scores(&human, &computer);
+    let game_round = play_game(&human, &computer, &mut rng);
 
-        if !play_again() {
-            break;
-        }
-    }
-    let how_many_wins = 3;
-    let input: bool = human.wins == how_many_wins;
+    println!("\nGame Round Data:");
+    println!("Seed used: {}", game_round.seed);
+    println!("Player moves: {:?}", game_round.player_moves);
+
+    let input = format_seed_and_moves(game_round.seed, &game_round.player_moves);
+
     let env = ExecutorEnv::builder().write(&input).unwrap().build().unwrap();
 
     // Obtain the default prover.
@@ -119,18 +119,22 @@ fn main() {
     let output: bool = receipt.journal.decode().unwrap();
 
     // Print, notice, after committing to a journal, the private input became public
-    println!("Wow it's {} that you won 3 times in a row", output);
+    println!("Wow it's {} that you won at ZiK-ZaK-ZoO!", output);
 }
 
-fn play_game(human: &mut Player, computer: &mut Player, rng: &mut SimpleRNG) {
+fn play_game(human: &Player, computer: &Player, rng: &mut SimpleRNG)  -> GameRound {
     let mut board = Board::new();
     let mut current_player = &human.symbol;
+    let seed = rng.state;
+    let mut player_moves = Vec::new();
 
-    loop {
+        loop {
         display_board(&board);
 
         let position = if *current_player == human.symbol {
-            get_human_move(&board)
+            let move_position = get_human_move(&board);
+            player_moves.push(move_position);
+            move_position
         } else {
             get_computer_move(&board, rng)
         };
@@ -143,14 +147,12 @@ fn play_game(human: &mut Player, computer: &mut Player, rng: &mut SimpleRNG) {
                 } else {
                     println!("Computer wins!");
                 }
-                update_scores(human, computer, Some(winner));
                 break;
             }
 
             if board.is_full() {
                 display_board(&board);
                 println!("It's a draw!");
-                update_scores(human, computer, None);
                 break;
             }
 
@@ -158,6 +160,11 @@ fn play_game(human: &mut Player, computer: &mut Player, rng: &mut SimpleRNG) {
         } else {
             println!("Invalid move. Try again.");
         }
+    }
+    
+    GameRound {
+        seed,
+        player_moves,
     }
 }
 
@@ -203,41 +210,11 @@ fn get_computer_move(board: &Board, rng: &mut SimpleRNG) -> usize {
     empty_cells[random_index]
 }
 
-fn update_scores(human: &mut Player, computer: &mut Player, winner: Option<Cell>) {
-    match winner {
-        Some(cell) if cell == human.symbol => {
-            human.wins += 1;
-            computer.losses += 1;
-        }
-        Some(_) => {
-            computer.wins += 1;
-            human.losses += 1;
-        }
-        None => {
-            human.draws += 1;
-            computer.draws += 1;
-        }
+fn format_seed_and_moves(seed: u64, moves: &[usize]) -> String {
+    let mut result = seed.to_string();
+    for &m in moves {
+        result.push(',');
+        result.push_str(&m.to_string());
     }
-}
-
-fn display_scores(human: &Player, computer: &Player) {
-    println!("\nScores:");
-    println!("You - Wins: {}, Losses: {}, Draws: {}", human.wins, human.losses, human.draws);
-    println!("Computer - Wins: {}, Losses: {}, Draws: {}", computer.wins, computer.losses, computer.draws);
-}
-
-fn play_again() -> bool {
-    loop {
-        println!("\nDo you want to play again? (y/n)");
-        let mut input = String::new();
-        io::stdin()
-            .read_line(&mut input)
-            .expect("Failed to read line");
-
-        match input.trim().to_lowercase().as_str() {
-            "y" | "yes" => return true,
-            "n" | "no" => return false,
-            _ => println!("Please enter 'y' or 'n'."),
-        }
-    }
+    result
 }
