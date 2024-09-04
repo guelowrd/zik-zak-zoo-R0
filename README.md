@@ -4,20 +4,17 @@ Title is pretty self-explanatory
 
 ## Quick Start
 
-First, make sure [rustup] is installed. The
-[`rust-toolchain.toml`][rust-toolchain] file will be used by `cargo` to
-automatically install the correct version.
+First, make sure `rustup` is installed. The `rust-toolchain.toml` file will be used by `cargo` to automatically install the correct version.
 
-To build all methods and execute the method within the zkVM, run the following
-command:
+To build all methods and execute the method within the zkVM, run the following command:
 
 ```bash
-cargo run
+RISC0_DEV_MODE=0 cargo run --release
 ```
 
 ## Questions, Feedback, and Collaborations (keeping that part cause RISC Zero ppl are cool)
 
-We'd love to hear from you on Discord or Twitter.
+RISC Zero would love to hear from you on Discord or Twitter.
 
 [bonsai access](https://bonsai.xyz/apply)
 [cargo-risczero](https://docs.rs/cargo-risczero)
