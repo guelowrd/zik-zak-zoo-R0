@@ -1,78 +1,8 @@
 use risc0_zkvm::guest::env;
 use std::str::FromStr;
-
-#[derive(Clone, Copy, PartialEq, Debug)]
-enum Cell {
-    Empty,
-    Z,
-    K,
-}
-
-struct Board {
-    cells: [Cell; 9],
-}
-
-struct SimpleRNG {
-    state: u64,
-}
-
-impl SimpleRNG {
-    fn new(seed: u64) -> Self {
-        SimpleRNG { state: seed }
-    }
-
-    fn next(&mut self) -> u64 {
-        self.state = self.state.wrapping_mul(6364136223846793005)
-            .wrapping_add(1442695040888963407);
-        self.state
-    }
-
-    fn rand_range(&mut self, min: usize, max: usize) -> usize {
-        (self.next() % (max - min + 1) as u64) as usize + min
-    }
-}
-
-impl Board {
-    fn new() -> Self {
-        Board {
-            cells: [Cell::Empty; 9],
-        }
-    }
-
-    fn make_move(&mut self, position: usize, player: Cell) -> bool {
-        if position < 9 && self.cells[position] == Cell::Empty {
-            self.cells[position] = player;
-            true
-        } else {
-            false
-        }
-    }
-
-    fn get_empty_cells(&self) -> Vec<usize> {
-        self.cells.iter().enumerate()
-            .filter(|(_, &cell)| cell == Cell::Empty)
-            .map(|(index, _)| index)
-            .collect()
-    }
-
-    fn check_winner(&self) -> Option<Cell> {
-        const WINNING_COMBINATIONS: [[usize; 3]; 8] = [
-            [0, 1, 2], [3, 4, 5], [6, 7, 8], // Rows
-            [0, 3, 6], [1, 4, 7], [2, 5, 8], // Columns
-            [0, 4, 8], [2, 4, 6],            // Diagonals
-        ];
-
-        for combo in WINNING_COMBINATIONS.iter() {
-            if self.cells[combo[0]] != Cell::Empty
-                && self.cells[combo[0]] == self.cells[combo[1]]
-                && self.cells[combo[1]] == self.cells[combo[2]]
-            {
-                return Some(self.cells[combo[0]]);
-            }
-        }
-        None
-    }
-}
+use zikzakzoo_core::Cell;
+use zikzakzoo_core::Board;
+use zikzakzoo_core::SimpleRNG;
 
 pub fn verify_player_win(input: &str) -> bool {
     let mut parts = input.split(',');
