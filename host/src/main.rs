@@ -1,4 +1,4 @@
-use methods::{HELLO_GUEST_ELF};
+use methods::{ZIKZAKZOO_GUEST_ELF};
 use risc0_zkvm::{default_prover, ExecutorEnv};
 use std::io;
 use std::time::{SystemTime, UNIX_EPOCH};
@@ -113,7 +113,7 @@ fn main() {
     let prover = default_prover();
 
     // Produce a receipt by proving the specified ELF binary.
-    let receipt = prover.prove(env, HELLO_GUEST_ELF).unwrap().receipt;
+    let receipt = prover.prove(env, ZIKZAKZOO_GUEST_ELF).unwrap().receipt;
 
     // Extract journal of receipt
     let output: bool = receipt.journal.decode().unwrap();
