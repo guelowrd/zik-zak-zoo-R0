@@ -1,6 +1,13 @@
 # Tic-tac-toe game but it's actually called Zik-zak-zoo (& you can zk-verify you won thanks to RISC Zero)
 
-Title is pretty self-explanatory
+Title is pretty self-explanatory, but let's dive into the details!
+
+## What is Zik-zak-zoo?
+
+Zik-zak-zoo is a fun twist on the classic tic-tac-toe game, where:
+- You play as 'Z' against the computer's 'K'
+- The game logic is implemented in Rust
+- You can prove your win using zero-knowledge proofs powered by RISC Zero
 
 ## Quick Start
 
@@ -12,7 +19,24 @@ To build all methods and execute the method within the zkVM, run the following c
 RISC0_DEV_MODE=0 cargo run --release
 ```
 
-## Questions, Feedback, and Collaborations (keeping that part cause RISC Zero ppl are cool)
+## How it works
+
+1. The game uses a simple RNG for the computer's moves ([LCR](https://en.wikipedia.org/wiki/Linear_congruential_generator) with [MMIX](https://en.wikipedia.org/wiki/MMIX) parameters)
+2. Your moves are recorded along with the initial seed
+3. After the round is played, the game data is used to generate a zero-knowledge proof...
+5. ... which get you bragging rights with cryptographic proof of your Zik-zak-zoo skills (well, if you won)!
+
+## Project Structure
+
+- `core/`: Contains the core game logic and data structures
+- `host/`: Implements the game flow and user interaction
+- `methods/`: Handles the zero-knowledge proof generation
+
+## License
+
+This project is licensed under the Apache License, Version 2.0. See the LICENSE file for details.
+
+## Questions, Feedback, and Collaborations (keeping that part cause RISC Zero ppl are cool!)
 
 RISC Zero would love to hear from you on Discord or Twitter.
 
